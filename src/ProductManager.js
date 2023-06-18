@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { title } = require('process');
+import fs from 'fs';
+import { title } from 'process';
 
 
 class ProductManager {
@@ -106,6 +106,12 @@ manager.addProduct('Cactus', 'Cactus interior', 250, 'Cactus.jpg', '001', 5);
 manager.addProduct('Suculenta', 'Suculenta de Jardin', 650, 'Suculenta.jpg', '002', 8);
 manager.addProduct('Maceta', 'Maceta N° 12', 150, 'Maceta.jpg', '003', 3);
 manager.addProduct('Maceta Grande', 'Maceta N° 18', 270, 'MacetaGrande.jpg', '004', 7);
+manager.addProduct('Tierra Fertil', 'Tierra fertil para jardin', 1100, 'Tierra Fertil.jpg', '005', 12);
+manager.addProduct('Tierra para interior', 'Tierra fertil para jardin de interior', 1640, 'Tierra para interior.jpg', '006', 8);
+manager.addProduct('Guantes', 'Guantes para jardineria', 980, 'Guantes.jpg', '007', 9);
+manager.addProduct('Tijeras', 'Tijeras para podar', 1300, 'Tijeras.jpg', '008', 8);
+manager.addProduct('kit jardineria', 'Kit de jardineria 4 piezas', 7500, 'kit jardineria.jpg', '009', 5);
+manager.addProduct('Fertilizante', 'Fertilizante 500gr', 2500, 'Fertilizante.jpg', '010', 10);
 
 const allProducts = manager.getProducts();
 console.log(allProducts);
@@ -113,8 +119,8 @@ console.log(allProducts);
 const product = manager.getProductById(2);
 console.log(product);
 
-const nonExistingProduct = manager.getProductById(5);
+const nonExistingProduct = manager.getProductById(15);
 
-const deleteProduct = manager.deleteProduct(2);
+const deleteProduct = manager.deleteProduct(12);
 
-const updatedData = manager.updateProduct(1, {"title":"cactus2"})
+const updatedData = manager.updateProduct(1, {"title":"Cactus2"})

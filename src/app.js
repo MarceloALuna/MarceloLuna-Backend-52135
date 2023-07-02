@@ -1,33 +1,15 @@
-import express from 'express';
-import ProductManager from './ProductManager.js';
+import express from "express";
+import prodRouter from './routes/products.router.js';
+import cartRouter from './routes/cart.router.js';
 
 const app = express();
 
-const productManager = new ProductManager(); 
-
-app.get('/products', (req, res) => {
-  const limit = req.query.limit;
-
-  let products = productManager.getProducts();
-
-  if (limit) {
-    products = products.slice(0, limit); 
-  }
-
-  res.json({ products });
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+app.use(express.static('public'));
 
 
-app.get('/products/:pid', (req, res) => {
-  const productId = parseInt(req.params.pid);
+app.use('/api/products', prodRouter);
+app.use('/api/cart', cartRouter);
 
-  const product = productManager.getProductById(productId); 
-
-  if (product) {
-    res.json({ product });
-  } else {
-    res.status(404).json({ error: 'Producto no encontrado' }); 
-  }
-});
-
-app.listen(8080)
+const server = app.listen(8080);

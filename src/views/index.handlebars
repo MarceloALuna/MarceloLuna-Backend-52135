@@ -1,0 +1,33 @@
+<div>
+    <header>
+        <nav>
+            <ul>
+                <li>home</li>
+                <li>products</li>
+                <li>realTimeProducts</li>
+            </ul>
+        </nav>
+    </header>
+    <h1>Productos</h1>
+
+    <div class="boxProducts">
+        {{#each arr}}
+            <div class="product">
+                <p>{{this.title}}</p>
+                <p><b>{{this.price}}</b></p>
+                <p>{{this.description}}</p>
+                <ul>
+                    {{#each this.thumbnail}}
+                        <li><img src={{this.img}} alt=""></li>
+                    {{/each}}
+                </ul>
+                <p>{{this.code}}</p>
+                <p>{{this.stock}}</p>
+                <p>{{this.status}}</p>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

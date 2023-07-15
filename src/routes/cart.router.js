@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import CartManager from '../CartManager.js';
+import express from 'express'
+import CartManager from '../manager/CartManager.js'
 
-const router = Router();
+const router = express.Router();
 const cartManager = new CartManager('cart.json');
 
 router.get('/', async (req, res)=>{

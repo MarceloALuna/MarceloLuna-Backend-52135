@@ -1,36 +1,54 @@
 import { Router } from 'express';
-import ProductManager from '../ProductManager.js';
+import ProductManager from '../manager/ProductManager.js'
 
 const router = Router();
-const productManager = new ProductManager('products.json');
+
+const productManager = new ProductManager();
 
 router.get('/', async (req, res)=>{
     let limit = req.query.limit;
     const products = await productManager.get();
     if(!limit){
-        return res.json(products);
+        res.render('index', {
+            style: 'index.css',
+            arr: products
+        });
+        req.io.emit('prod', products);
+    }else{
+        limit = limit < products.length ? limit : products.length;
+        const arr = [];
+        for(let i=0; i<limit; i++){
+            arr.push(products[i]);
+        }
+        res.render('index', {
+            style: 'index.css',
+            arr
+        });
+        req.io.emit('prod', arr);
     }
-    limit = limit < products.length ? limit : products.length;
-    const arr = [];
-    for(let i=0; i<limit; i++){
-        arr.push(products[i]);
-    }
-    return res.json(arr);
+})
+
+router.get('/realtimeproducts', async (req, res) =>{
+    const products = await productManager.get();
+    res.render('realTimeProducts', 
+    {
+        title: "Lista de Productos",
+        products: products
+    })
 })
 
 router.get('/:pid', async (req, res)=>{
     const pid = parseInt(req.params.pid);
     const prod = await productManager.getbyId(pid);
     if(prod == -1) return res.status(404).send(`product not found`);
+    req.io.emit('prod', prod);
     return res.json(prod);
 })
 
 router.post('/', async (req, res)=>{
     const prod = req.body;
-
-
     const prodAdd = await productManager.add(prod);
-    
+    req.io.emit('prod', await productManager.create(data));
     res.send({status: 'successful', prodAdd})
 })
 
@@ -47,7 +65,7 @@ router.put('/:pid', async (req, res) =>{
     }
     
     await productManager.update(pid, prod);
-
+    req.io.emit('prod', await productManager.get());
     res.send({status: 'update successful', prod});
 })
 
@@ -55,7 +73,9 @@ router.delete('/:pid', async (req, res)=>{
     const pid = parseInt(req.params.pid);
     const nlist = await productManager.delete(pid);
     if(!nlist) return res.status(404).send(`product not found`);
+    req.io.emit('prod', await productManager.get());
     res.send({status: 'update successful', nlist});
 })
 
 export default router;
+
